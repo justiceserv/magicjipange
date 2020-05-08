@@ -339,42 +339,6 @@ client.on("message", async message =>{
       }
 
     }
-    if(command === "실검")
-    {
-      var request = require("request");
-      var url = "https://www.naver.com/srchrank?frm=main&ag=all&gr=0&ma=0&si=0&en=0&sp=0";
-      request(url, function(error, response, html)
-      {
-        if(error)
-        {
-          throw error;
-        };
-        var keywords = [];
-        var keywordsWithSynonyms = [];
-        try
-        {
-          datas = JSON.parse(html);
-          for(var i in datas["data"])
-          {
-            var keywordData = datas["data"][i];
-            var str = keywordData["rank"] + "." + keywordData["keyword"];
-            keywords.push(str);
-            keywordsWithSynonyms.push(str + (keywordData["keyword_synonyms"][0] ? " , " + keywordData["keyword_synonyms"] : ""));
-          }
-        }
-        catch(e)
-        {
-          console.error(e);
-        }
-        let naversearch = new Discord.MessageEmbed()
-          .setColor('#5beb34')
-          .setTitle('**네이버 실시간 검색어입니다!**')
-          .setDescription(keywords.join("\n"))
-          .setTimestamp()
-          .setFooter('http://invite.magicjipange.kro.kr', 'https://i.ibb.co/mG6TX82/unnamed-1.jpg');
-        message.channel.send(naversearch);
-      });
-    }
     if(command.startsWith("투표"))
     {
       let toopyo = new Discord.MessageEmbed()
@@ -478,89 +442,7 @@ client.on("message", async message =>{
         }
       }
     }
-    if(command.startsWith("강화"))
-    {
-      var moment = require('moment');
-      var d = new Date();
-      var currentDate = d.getFullYear() + "년 " + ( d.getMonth() + 1 ) + "월 " + d.getDate() + "일";
-      var soik = moment().format('YYYY-MM-DD-HH-mm');
-      var argument2 = com.split(/\s+/); //두번째 argument 체크
-      if(argument2[1] === "삭제") //삭제시
-      {
-        if(argument2[2] === null)
-        {
-          message.channel.send(":x: 삭제할 아이템을 입력해주십시오! :x:");
-        }
-        else
-        {
-          if(argument2[2] === mance[message.author.id].mance)
-          {
-            mance[message.author.id] ={mance: 0, time: 0, level: 0};
-            let mancedeleteembed = new Discord.MessageEmbed()
-              .setTitle(argument2[2] + "**아이템을 정상적으로 삭제하였습니다!**")
-              .setColor('#5beb34')
-              .setTimestamp()
-              .setFooter('http://invite.magicjipange.kro.kr', 'https://i.ibb.co/mG6TX82/unnamed-1.jpg');
-            message.channel.send(mancedeleteembed);
-          }
-          if(!argument2[2] === mance[message.author.id].mance)
-          {
-            message.channel.send(":x: 삭제할 아이템을 정확히 입력해주세요! :x:");
-          }
-        }
-      } //삭제 끝
-      else
-      {
-        if(!mance[message.author.id])
-        {
-          mance[message.author.id] = {mance:0, time:0, level: 0};
-        }
-        if(argument2[1] < 0)
-        {
-          message.channel.send(":x: 강화할 아이템을 정확히 입력해주세요! :x:");
-        }
-        if(!argument2[1] === mance[message.author.id].mance)
-        {
-          message.channel.send(":x: 유저당 강화가 가능한 아이템은 1개입니다! :x:");
-        }
-        if(mance[message.author.id].time === soik)
-        {
-          message.channel.send(":alarm_clock: 쿨타임이 있습니다. 잠시만 기다려주세요. :alarm_clock: ");
-        }
-        if(argument2[1] < 0)
-        {
-          message.channel.send(":x: 강화할 아이템을 정확히 입력해주세요! :x:");
-        }
-        else
-        {
-          mance[message.author.id] = {mance: mance[message.author.id].mance, time: mance[message.author.id].time, level: mance[message.author.id].level,};
-          var randommance = Math.floor(Math.random() * (40 - 0) + 0);
-          if(mance[message.author.id].level == 0)
-          {
-            if(randommance < 20)
-            {
-              if(mance[message.author.id].level > randommance)
-              {
-                    message.channel.send(':sob: ' + argument2[1]+ ` 강화에 실패하였습니다! 현재레벨: ${mance[message.author.id].level} :sob:`);
-                    mance[message.author.id] = {mance: argument2[1], time: mance[message.author.id].time, level: mance[message.author.id].level - randommance,};
-              }
-              if(mance[message.author.id].level < randommance)
-              {
-                  message.channel.send(':camera_with_flash: ' + argument2[2] + '아이템이 파괴되었습니다! :camera_with_flash: ');
-                  mance[message.author.id] = {mance:0, time:0, level: 0};
-              }
-            }//아이템 강화 실패 if
-            else
-            {
-              randommance = randommance - 19;
-              mance[message.author.id] = {mance: argument2[1], time: mance[message.author.id].time, level: mance[message.author.id].level + randommance,}
-              message.channel.send(':star: ' + argument2[1] + ` 의 강화에 성공했습니다! 현재레벨: ${mance[message.author.id].level} :star:`);
-            }
-            fs.writeFile("./database/mance.json", JSON.stringify(mance), err => {if (err) throw err;});
-          }
-        }
-      }
-    }
+
     if(command === "윙가르디온 레비오우사")
     {
       message.channel.send(":bird: 난다 날아! :bird:");
