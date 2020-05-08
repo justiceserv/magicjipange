@@ -34,10 +34,12 @@ MEE6 이나 Groovy 를 사용할때 영어 사용하기 귀찮아서 만들어�
 + 입장/퇴장 로그 커스텀 설정 
 ## 목적
 유튜브나 깃헙같은 코드를 보면 discord.js 입문자가 이해하기 어려운 코드가 많이 존재하여, 주석 등을 이용하여 이해를 하기 편한 코드를 가진 봇을 만들었습니다. 
+
 (+ Discord Verified Developer 뱃지 받고 싶어서도 있습니다)
 
 ## 초대 
 봇 추가(oauth): http://invite.magicjipange.kro.kr 
+
 공식 디스코드: http://discord.magicjipange.kro.kr 
 
 서버 75개 참여를 성공해서 verified discord developer 뱃지를 받으면 
