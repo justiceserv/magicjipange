@@ -7,6 +7,7 @@ const infraction = require("./database/infraction.json");
 client.muted = require("./database/muted.json");
 const config = require("./config/config.json");
 const fs = require('fs');
+const stopwatcharray = [];
 const helpmodembed = new Discord.MessageEmbed()
   .setColor('#E3A624')
   .setTitle('서버 관리 도움말(마법지팡이)')
@@ -82,6 +83,10 @@ const helpembed = new Discord.MessageEmbed()
     {
       name: "=임베드 | 제목 | 내용 | HEX 색깔코드 | 채널",
       value: "제목과 내용이 담겨있는 임베드 메세지를 특정한 채널로 전송합니다."
+    },
+    {
+      name: "=공부 시작/종료",
+      value: "공부를 시작한 시점부터 종료한 시점까지의 시간을 표시합니다."
     },
     {
       name: "=도움말 관리",
@@ -380,7 +385,7 @@ client.on("message", async message =>{
               });
               toMute.roles.add(role.id);
               let muteembed = new Discord.MessageEmbed()
-              .setTitle(toMute + "**님을 성공적으로 뮤트했습니다!**")
+              .setTitle("<@" + toMute +">" + "**님을 성공적으로 뮤트했습니다!**")
               .setColor('#5beb34')
               .setTimestamp()
               .setFooter('http://invite.magicjipange.kro.kr', 'https://i.ibb.co/mG6TX82/unnamed-1.jpg');
@@ -425,7 +430,7 @@ client.on("message", async message =>{
         {
           toUnMute.roles.remove(role.id);
           let unmuteembed = new Discord.MessageEmbed()
-          .setTitle(toUnMute + "**님을 성공적으로 언뮤트했습니다!**")
+          .setTitle(`<@${toMute}>**님을 성공적으로 언뮤트했습니다!**`)
           .setColor('#5beb34')
           .setTimestamp()
           .setFooter('http://invite.magicjipange.kro.kr', 'https://i.ibb.co/mG6TX82/unnamed-1.jpg');
@@ -442,7 +447,6 @@ client.on("message", async message =>{
         }
       }
     }
-
     if(command === "윙가르디온 레비오우사")
     {
       message.channel.send(":bird: 난다 날아! :bird:");
@@ -473,7 +477,7 @@ client.on("message", async message =>{
         else
         {
           let kickedembed = new Discord.MessageEmbed()
-            .setTitle(":no_entry_sign: "+ member +" 님이 경고 5번으로 킥 당하셨습니다! :no_entry_sign: ")
+            .setTitle(":no_entry_sign: "+ member.username +" 님이 경고 5번으로 킥 당하셨습니다! :no_entry_sign: ")
             .setColor('#c4002e')
             .setTimestamp()
             .setFooter('http://invite.magicjipange.kro.kr', 'https://i.ibb.co/mG6TX82/unnamed-1.jpg');
@@ -511,5 +515,49 @@ client.on("message", async message =>{
       }
     }
   }//check if prefix is correct ends
+  if(command.startsWith("공부"))
+  {
+    const stopWatch = require('stopwatch-js');
+    var argument1 = message.content.split(" ");
+    const userwatch = new stopWatch();
+    if(argument1[1] === "시작")
+    {
+      userwatch.start();
+      let stopwatchstart = new Discord.MessageEmbed()
+        .setTitle(message.member.user.tag + "님이 공부를 시작했습니다!")
+        .setDescription("=공부 종료를 하시면 결과를 보내드립니다.")
+        .setColor("#61eb34")
+        .setTimestamp()
+        .setFooter('http://invite.magicjipange.kro.kr', 'https://i.ibb.co/mG6TX82/unnamed-1.jpg');
+      message.channel.send(stopwatchstart);
+      stopwatcharray.push(message.author.id);
+    } //공부 시작
+    else if(argument1[1] === "종료")
+    {
+      if(stopwatcharray.indexOf(message.author.id) != -1)
+      {
+        var n = stopwatcharray.indexOf(message.author.id);
+        let stopwatchstopped = new Discord.MessageEmbed()
+          .setTitle(":green_square: " + message.member.user.tag + "님이 공부를 종료했습니다! :green_square:")
+          .setDescription(userwatch.duration() + "동안 공부하셨습니다! 수고하셨습니다! :thumbsup: ")
+          .setColor("#61eb34")
+          .setTimestamp()
+          .setFooter('http://invite.magicjipange.kro.kr', 'https://i.ibb.co/mG6TX82/unnamed-1.jpg');
+        message.channel.send(stopwatchstopped);
+        stopwatcharray.splice(n, 1);
+        userwatch.stop();
+      }
+      else if(stopwatcharray.indexOf(message.author.id) === -1)
+      {
+        let yangshim = new Discord.MessageEmbed()
+          .setTitle("으음...?")
+          .setDescription("당신은 양심도 없습니까? 공부를 하고 종료를 누르십시오 휴먼.")
+          .setColor("#fc2003")
+          .setTimestamp()
+          .setFooter('http://invite.magicjipange.kro.kr', 'https://i.ibb.co/mG6TX82/unnamed-1.jpg');
+        message.channel.send(yangshim);
+      }
+    } //공부 종료
+  }
 });
 client.login(config.token);
