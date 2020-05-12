@@ -46,3 +46,5 @@ MEE6 이나 Groovy 를 사용할때 영어 사용하기 귀찮아서 만들어�
 
 서버 75개 참여를 성공해서 verified discord developer 뱃지를 받으면 
 공개되지 않은 커맨드를 공개할수도...?
+
+Github PUSH/PULL update 웹훅을 원하신다면 streaksinsa#0001 로 DM주세요!
